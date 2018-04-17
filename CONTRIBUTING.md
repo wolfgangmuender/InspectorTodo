@@ -2,7 +2,7 @@
 
 Contributions are very welcome. The following will provide some helpful guidelines.
 
-## InspectorToDo Contributor License Agreement
+## InspectorTodo Contributor License Agreement
 
 * You will only submit contributions where you have authored 100% of the content.
 * You will only submit contributions to which you have the necessary rights.
@@ -42,7 +42,7 @@ Resolves #123
 Furthermore, please add the following line to your Pull Request description with your full name and e-mail address:
 
 ```
-I hereby agree to the terms of the InspectorToDo Contributor License Agreement. <FULL NAME>, <EMAIL_ADDRESS>
+I hereby agree to the terms of the InspectorTodo Contributor License Agreement. <FULL NAME>, <EMAIL_ADDRESS>
 ```
 
 ### Formatting
