@@ -1,0 +1,50 @@
+# Copyright 2018 TNG Technology Consulting GmbH, Unterföhring, Germany
+# Licensed under the Apache License, Version 2.0 - see LICENSE.md in project root directory
+
+
+LICENSE = """
+   Copyright 2018 TNG Technology Consulting GmbH, Unterföhring, Germany
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+"""
+
+with open('README.md') as readme_file:
+    README = readme_file.read()
+
+from setuptools import setup, find_packages
+
+setup(
+    name='inspectortodo',
+    version='0.1',
+    description=README,
+    packages=find_packages(where='src'),
+    package_dir={'': 'src'},
+    package_data={'': ['README.md', 'LICENSE.md']},
+    python_requires='>=3.6',
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Environment :: Console',
+        'Intended Audience :: Information Technology',
+        'License :: OSI Approved :: Apache Software License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 3.6',
+        'Topic :: Software Development :: Quality Assurance',
+    ],
+    install_requires=[
+        'GitPython>=2.1.9',
+    ],
+    entry_points='''
+        [console_scripts]
+        inspectortodo=inspectortodo.main:main
+    ''',
+)
