@@ -7,7 +7,7 @@ import os
 import sys
 
 from .parser import (BashTodoParser, JavaTodoParser, PythonTodoParser, XmlTodoParser, PhpTodoParser, CsharpTodoParser,
-                    JavaScriptTodoParser)
+                     JavaScriptTodoParser)
 from .validator import (RegExpValidator, VersionsValidator)
 
 
@@ -22,16 +22,16 @@ csharp_parser = CsharpTodoParser(['TODO'])
 javascript_parser = JavaScriptTodoParser(['TODO'])
 
 
-def find_invalid_todos(root_dir, arguments):
+def find_invalid_todos(root_dir, ticket_pattern, version_pattern, version, versions):
     validators = [
-        RegExpValidator(arguments.ticket_pattern)
+        RegExpValidator(ticket_pattern)
     ]
 
-    if arguments.versions is not None and arguments.version is not None:
-        validators += VersionsValidator(arguments.versions, arguments.version)
+    if versions is not None and version is not None:
+        validators += VersionsValidator(versions, version)
 
-    if arguments.version_pattern is not None:
-        validators += RegExpValidator(arguments.version_pattern)
+    if version_pattern is not None:
+        validators += RegExpValidator(version_pattern)
 
     log.info("Searching '%s' for forgotten todos.", root_dir)
     todos = traverse(root_dir)

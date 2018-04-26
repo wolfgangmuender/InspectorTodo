@@ -41,6 +41,8 @@ setup(
         'Topic :: Software Development :: Quality Assurance',
     ],
     install_requires=[
+        'click>=6.7',
+        'click-log>=0.2.1',
         'GitPython>=2.1.9',
     ],
     entry_points='''

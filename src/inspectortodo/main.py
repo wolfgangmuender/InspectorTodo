@@ -1,30 +1,29 @@
 # Copyright 2018 TNG Technology Consulting GmbH, Unterföhring, Germany
 # Licensed under the Apache License, Version 2.0 - see LICENSE.md in project root directory
 
-import argparse
 import logging
 import os
+
+import click
+import click_log
 
 from .find_invalid_todos import find_invalid_todos
 
 
-log = logging.getLogger()
+click_log.basic_config()
 
 
-def main():
-    parser = argparse.ArgumentParser(description=''' Searches for todos in given folder tree and complains about invalid todos. ''')
-    parser.add_argument('--root-dir', required=True, metavar='DIR', help='Root directory for folder tree.')
-    parser.add_argument('--ticket-pattern', required=True, help='Pattern for ticket reference in todo.')
-    parser.add_argument('--version-pattern', help='Pattern for version reference in todo.')
-    parser.add_argument('--version', help='Current version.')
-    parser.add_argument('--versions', nargs='*', help='List of versions allowed in todos. Versions increase from left to right.')
-    parser.add_argument('--log-level', metavar='LEVEL', default='INFO', help="Set the log level (WARN, DEBUG, ERROR, ...)")
-    parser.add_argument('--log-file', metavar='FILE', help="Set the log file (defaults to STDERR)")
-    parser.add_argument('--log-format', metavar='FORMAT', default='[%(levelname)s] %(message)s', help="Set a custom format for log messages")
-    arguments = parser.parse_args()
+@click.command()
+@click.argument('ROOT_DIR', required=True, help='Root directory to inspect.')
+@click.argument('TICKET-PATTERN', required=True, help='Pattern for ticket reference in todo.')
+@click.option('--version-pattern', help='Pattern for version reference in todo.')
+@click.option('--version', help='Current version.')
+@click.option('--versions', nargs='*', help='List of versions allowed in todos. Versions increase from left to right.')
+@click.option('--log-level', default='INFO', help="Set the log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
+def main(root_dir, ticket_pattern, version_pattern, version, versions, log_level):
 
-    logging.basicConfig(filename=arguments.log_file, level=arguments.log_level.upper(), format=arguments.log_format)
+    logging.basicConfig(level=log_level.upper(), format='[%(levelname)s] %(message)s')
 
-    root_dir = os.path.normpath(os.path.abspath(arguments.root_dir))
+    root_dir = os.path.normpath(os.path.abspath(root_dir))
 
-    find_invalid_todos(root_dir, arguments)
+    find_invalid_todos(root_dir, ticket_pattern, version_pattern, version, versions)
