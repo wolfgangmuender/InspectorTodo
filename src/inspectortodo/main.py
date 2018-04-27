@@ -6,7 +6,10 @@ import os
 
 import click
 
-from .find_invalid_todos import find_invalid_todos
+from .todo_finder import TodoFinder
+from .todo_validation import validate_todos
+
+log = logging.getLogger()
 
 
 @click.command()
@@ -28,4 +31,10 @@ def main(root_dir, ticket_pattern, version_pattern, version, versions, log_level
     root_dir = os.path.normpath(os.path.abspath(root_dir))
     versions = versions.split(',') if versions else versions
 
-    find_invalid_todos(root_dir, ticket_pattern, version_pattern, version, versions)
+    todo_finder = TodoFinder(root_dir)
+    todos = todo_finder.find()
+    if not todos:
+        log.info('No todos found.')
+        return
+
+    validate_todos(todos, ticket_pattern, version_pattern, version, versions)
