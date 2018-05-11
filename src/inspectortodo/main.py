@@ -29,6 +29,7 @@ def main(root_dir, ticket_pattern, version_pattern, version, versions, log_level
     logging.basicConfig(level=log_level.upper(), format='[%(levelname)s] %(message)s')
 
     root_dir = os.path.normpath(os.path.abspath(root_dir))
+    ticket_pattern = ticket_pattern.strip()
     versions = versions.split(',') if versions else versions
 
     todo_finder = TodoFinder(root_dir)

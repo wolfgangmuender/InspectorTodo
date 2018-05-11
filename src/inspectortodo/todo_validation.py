@@ -15,19 +15,18 @@ def validate_todos(todos, ticket_pattern, version_pattern, version, versions):
     validators = [
         RegExpValidator(ticket_pattern)
     ]
-    if versions is not None and version is not None:
-        validators += VersionsValidator(versions, version)
+
     if version_pattern is not None:
-        validators += RegExpValidator(version_pattern)
+        version_validator = RegExpValidator(version_pattern)
+        if versions is not None and version is not None:
+            version_validator.set_dependent_validator(VersionsValidator(versions, version))
+        validators.append(version_validator)
 
     invalid_todos = []
     for todo in todos:
-        for validator in validators:
-            if validator.validate(todo):
-                continue
-
-        todo.mark_as_invalid('Todo is not conform to any validator!')
-        invalid_todos.append(todo)
+        validate_todo(validators, todo)
+        if not todo.is_valid:
+            invalid_todos.append(todo)
 
     if not invalid_todos:
         log.info('All todos are fine.')
@@ -39,3 +38,11 @@ def validate_todos(todos, ticket_pattern, version_pattern, version, versions):
     for invalid_todo in invalid_todos:
         invalid_todo.print()
         log.error('------------------------------------------------------------------------------')
+
+
+def validate_todo(validators, todo):
+    for validator in validators:
+        if validator.validate(todo):
+            return
+
+    todo.mark_as_invalid('Todo is not conform to any validator!')

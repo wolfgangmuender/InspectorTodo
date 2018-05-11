@@ -3,13 +3,16 @@
 
 import re
 
+from .base_validator import BaseValidator
 
-class RegExpValidator:
+
+class RegExpValidator(BaseValidator):
 
     def __init__(self, regexp):
+        super().__init__()
         self.regexp = regexp
         self.regexp_compiled = re.compile(regexp)
 
-    def validate(self, todo):
+    def _validate(self, todo):
         match = self.regexp_compiled.search(todo.content)
         return match is not None
