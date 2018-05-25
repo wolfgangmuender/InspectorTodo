@@ -14,8 +14,9 @@ log = logging.getLogger()
 
 class TodoFinder(object):
 
-    def __init__(self, root_dir):
+    def __init__(self, root_dir, files_whitelist):
         self.root_dir = root_dir
+        self.files_whitelist = files_whitelist
 
         self.java_parser = JavaTodoParser(['TODO'])
         self.bash_parser = BashTodoParser(['TODO'])
@@ -34,7 +35,7 @@ class TodoFinder(object):
             return self._traverse_folder()
 
     def _traverse_git(self, repository):
-        log.info("Traversing all files under git control in folder '{}'.".format(repository.working_dir))
+        log.info("Traversing all files under git control in folder '%s'.", repository.working_dir)
         return self._traverse_tree(repository.tree())
 
     def _traverse_tree(self, tree):
@@ -46,7 +47,7 @@ class TodoFinder(object):
         return todos
 
     def _traverse_folder(self):
-        log.info("Traversing all files under folder '{}'.".format(self.root_dir))
+        log.info("Traversing all files under folder '%s'.", self.root_dir)
         todos = []
         for (root_dir_name, dir_names, file_names) in os.walk(self.root_dir):
             for file_name in file_names:
@@ -56,7 +57,11 @@ class TodoFinder(object):
         return todos
 
     def _parse(self, absolute_path, relative_path):
-        log.debug("Parsing file {}".format(absolute_path))
+        if relative_path in self.files_whitelist:
+            log.debug("Skipping whitelisted file %s", relative_path)
+            return []
+
+        log.debug("Parsing file %s", absolute_path)
         file_extension = os.path.splitext(absolute_path)[1]
         if file_extension == '.java':
             log.debug("Parsing Java file %s", relative_path)

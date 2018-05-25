@@ -3,24 +3,34 @@
 
 import logging
 
-from .validator import (RegExpValidator, VersionsValidator)
-
+from .config import get_config_value, get_config_value_as_list
+from .validator import (JiraValidator, RegExpValidator, VersionsValidator)
 
 log = logging.getLogger()
 
 
-def validate_todos(todos, ticket_pattern, version_pattern, version, versions):
+def validate_todos(todos, issue_pattern, version_pattern, version, versions):
     log.info('Validating %d todos.', len(todos))
 
-    validators = [
-        RegExpValidator(ticket_pattern)
-    ]
+    validators = []
+
+    issue_validator = RegExpValidator(issue_pattern)
+    validators.append(issue_validator)
+
+    if get_config_value('jira_server', 'url'):
+        jira_validator = JiraValidator(issue_pattern,
+                                       get_config_value('jira_server', 'url'),
+                                       get_config_value('jira_server', 'username'),
+                                       get_config_value('jira_server', 'password'),
+                                       get_config_value_as_list('statuses', 'all'))
+        issue_validator.set_dependent_validator(jira_validator)
 
     if version_pattern is not None:
         version_validator = RegExpValidator(version_pattern)
+        validators.append(version_validator)
+
         if versions is not None and version is not None:
             version_validator.set_dependent_validator(VersionsValidator(versions, version))
-        validators.append(version_validator)
 
     invalid_todos = []
     for todo in todos:
@@ -33,7 +43,7 @@ def validate_todos(todos, ticket_pattern, version_pattern, version, versions):
         return
 
     log.error('------------------------------------------------------------------------------')
-    log.error('Found {} invalid todos.'.format(len(invalid_todos)))
+    log.error('Found %d invalid todos.', len(invalid_todos))
     log.error('------------------------------------------------------------------------------')
     for invalid_todo in invalid_todos:
         invalid_todo.print()
@@ -45,4 +55,4 @@ def validate_todo(validators, todo):
         if validator.validate(todo):
             return
 
-    todo.mark_as_invalid('Todo is not conform to any validator!')
+    todo.mark_as_invalid('Todo is not conform to any validator.')

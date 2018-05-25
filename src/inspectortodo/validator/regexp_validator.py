@@ -15,4 +15,9 @@ class RegExpValidator(BaseValidator):
 
     def _validate(self, todo):
         match = self.regexp_compiled.search(todo.content)
-        return match is not None
+        if match:
+            todo.mark_as_valid()
+            return True
+        else:
+            todo.mark_as_invalid('Todo does not match regular expression \'{}\'.'.format(self.regexp))
+            return False

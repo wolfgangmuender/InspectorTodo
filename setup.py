@@ -1,6 +1,8 @@
 # Copyright 2018 TNG Technology Consulting GmbH, Unterföhring, Germany
 # Licensed under the Apache License, Version 2.0 - see LICENSE.md in project root directory
 
+from setuptools import setup, find_packages
+
 
 LICENSE = """
    Copyright 2018 TNG Technology Consulting GmbH, Unterföhring, Germany
@@ -18,10 +20,9 @@ LICENSE = """
    limitations under the License.
 """
 
+
 with open('README.md') as readme_file:
     README = readme_file.read()
-
-from setuptools import setup, find_packages
 
 setup(
     name='inspectortodo',
@@ -44,6 +45,7 @@ setup(
         'click>=6.7',
         'click-log>=0.2.1',
         'GitPython>=2.1.9',
+        'jira>=1.0.15',
     ],
     entry_points='''
         [console_scripts]

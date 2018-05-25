@@ -16,8 +16,8 @@ class VersionsValidator(BaseValidator):
     def _validate(self, todo):
         for version in self.allowed_versions:
             if version in todo.content:
+                todo.mark_as_valid()
                 return True
 
         todo.mark_as_invalid('Todo does not refer to an allowed version.')
-
         return False

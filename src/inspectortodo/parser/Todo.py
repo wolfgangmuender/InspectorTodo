@@ -18,6 +18,10 @@ class Todo:
     def __str__(self):
         return 'In file ' + self.file_path + ':' + str(self.line_number) + '\n' + self.content
 
+    def mark_as_valid(self):
+        self.is_valid = True
+        self.error_reason = None
+
     def mark_as_invalid(self, error_reason):
         self.is_valid = False
         self.error_reason = error_reason

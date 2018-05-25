@@ -6,6 +6,7 @@ import os
 
 import click
 
+from .config import load_or_create_config, get_config_value, get_multiline_config_value_as_list
 from .todo_finder import TodoFinder
 from .todo_validation import validate_todos
 
@@ -14,28 +15,38 @@ log = logging.getLogger()
 
 @click.command()
 @click.argument('ROOT_DIR', required=True)
-@click.argument('TICKET_PATTERN', required=True)
+@click.argument('ISSUE_PATTERN', required=True)
 @click.option('--version-pattern', help='Regular expression for version references in todos.')
 @click.option('--version', help='Current version.')
-@click.option('--versions', help='List of versions allowed in todos. Versions are separated by comma and increase from left to right.')
+@click.option('--versions', help='List of versions allowed in todos.'
+                                 'Versions are separated by comma and increase from left to right.')
+@click.option('--configfile', help='Config file to be used. If file does not exist, default config is created.'
+                                   'If not set, all config values are treated as None.')
 @click.option('--log-level', default='INFO', help="Set the log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
-def main(root_dir, ticket_pattern, version_pattern, version, versions, log_level):
+def main(root_dir, issue_pattern, version_pattern, version, versions, configfile, log_level):
     """
     ROOT_DIR is the directory to inspect recursively.
 
-    TICKET_PATTERN is a regular expression for the ticket references in todos.
+    ISSUE_PATTERN is a regular expression for the issue references in todos.
     """
 
     logging.basicConfig(level=log_level.upper(), format='[%(levelname)s] %(message)s')
 
     root_dir = os.path.normpath(os.path.abspath(root_dir))
-    ticket_pattern = ticket_pattern.strip()
+    issue_pattern = issue_pattern.strip()
     versions = versions.split(',') if versions else versions
 
-    todo_finder = TodoFinder(root_dir)
+    if configfile:
+        load_or_create_config(configfile)
+
+    paths_whitelist = []
+    if get_config_value('files', 'whitelist'):
+        paths_whitelist = get_multiline_config_value_as_list('files', 'whitelist')
+
+    todo_finder = TodoFinder(root_dir, paths_whitelist)
     todos = todo_finder.find()
     if not todos:
         log.info('No todos found.')
         return
 
-    validate_todos(todos, ticket_pattern, version_pattern, version, versions)
+    validate_todos(todos, issue_pattern, version_pattern, version, versions)

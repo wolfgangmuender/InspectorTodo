@@ -8,6 +8,6 @@ from inspectortodo.todo_finder import TodoFinder
 
 def test_find():
     root_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_project')
-    todo_finder = TodoFinder(root_dir)
+    todo_finder = TodoFinder(root_dir, [])
     todos = todo_finder.find()
     assert 1 == len(todos)
