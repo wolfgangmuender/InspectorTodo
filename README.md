@@ -8,11 +8,18 @@ Download or clone this project and go to the resulting directory (Python >= 3.6 
 
     pip install .
 
-Then you can run inspectortodo:
+Then you can run InspectorTodo:
 
     inspectortodo --help
 
 If you installed it in a virtualenv (which is recommended), then you always have to activate the virtualenv first.
+
+### Example
+
+The source code of InspectorTodo contains a small example project which can be parsed with the command (assuming you
+are at project root)
+
+    inspectortodo ./tests/inspectortodo/test_project "IT-\d+" --version-pattern "Release-\d+" --version 2 --versions 1,2,3
 
 ### Config file
 
