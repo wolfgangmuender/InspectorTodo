@@ -26,13 +26,19 @@ class TodoFinder(object):
         self.csharp_parser = CsharpTodoParser(['TODO'])
         self.javascript_parser = JavaScriptTodoParser(['TODO'])
 
+        self.num_files = 0
+
     def find(self):
         log.info("Searching '%s' for todos.", self.root_dir)
         try:
             repository = Repo(self.root_dir)
-            return self._traverse_git(repository)
+            todos = self._traverse_git(repository)
         except InvalidGitRepositoryError:
-            return self._traverse_folder()
+            todos = self._traverse_folder()
+
+        log.info('Found %d todos in %d files.', len(todos), self.num_files)
+
+        return todos
 
     def _traverse_git(self, repository):
         log.info("Traversing all files under git control in folder '%s'.", repository.working_dir)
@@ -61,7 +67,12 @@ class TodoFinder(object):
             log.debug("Skipping whitelisted file %s", relative_path)
             return []
 
+        if self.num_files > 0 and self.num_files % 1000 == 0:
+            log.info("Total files parsed: %d", self.num_files)
+
         log.debug("Parsing file %s", absolute_path)
+        self.num_files += 1
+
         file_extension = os.path.splitext(absolute_path)[1]
         if file_extension == '.java':
             log.debug("Parsing Java file %s", relative_path)

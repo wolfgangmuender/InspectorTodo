@@ -27,7 +27,8 @@ def main(root_dir, issue_pattern, version_pattern, version, versions, configfile
     """
     ROOT_DIR is the directory to inspect recursively.
 
-    ISSUE_PATTERN is a regular expression for the issue references in todos.
+    ISSUE_PATTERN is a regular expression for issue references in todos. The regular expression has to match the entire
+    issue reference, e.g. IT-\d+
     """
 
     logging.basicConfig(level=log_level.upper(), format='[%(levelname)s] %(message)s')
@@ -45,8 +46,6 @@ def main(root_dir, issue_pattern, version_pattern, version, versions, configfile
 
     todo_finder = TodoFinder(root_dir, paths_whitelist)
     todos = todo_finder.find()
-    if not todos:
-        log.info('No todos found.')
-        return
 
-    validate_todos(todos, issue_pattern, version_pattern, version, versions)
+    if todos:
+        validate_todos(todos, issue_pattern, version_pattern, version, versions)

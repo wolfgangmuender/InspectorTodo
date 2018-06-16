@@ -11,3 +11,4 @@ def test_find():
     todo_finder = TodoFinder(root_dir, [])
     todos = todo_finder.find()
     assert 5 == len(todos)
+    assert 2 == todo_finder.num_files
