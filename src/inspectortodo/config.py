@@ -20,7 +20,7 @@ all: Backlog,Todo,In Progress
 [files]
 # whitelist of file paths where todos are not searched or validated, relative to the root directory
 whitelist=
-    file1.ext
+    folder/file1.ext
     sub/sub/file2.ext
 '''.strip()
 

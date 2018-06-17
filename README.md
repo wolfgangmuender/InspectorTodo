@@ -26,6 +26,23 @@ are at project root)
 To use advanced features you can use a config file by passing a file path via the --configfile option. If the file does 
 not exist a default config is created which you can adapt afterwards.
 
+If issues are tracked in an issue tracker like JIRA, InspectorTodo can validate whether issues that are referenced in a 
+todo are in an allowed status.
+
+#### JIRA server
+
+Connection settings for a JIRA server.
+
+#### Statuses
+
+A list of allowed statuses in the issue tracker, like "Backlog" or "Todo".
+
+#### Files
+
+If there are files in the project that should not be parsed (e.g. because they belong to another project), you can 
+configure a whitelist of files here, relative to the project root. Compare the entries from the example config for
+details.
+
 ### Copyright & License
 
 InspectorTodo was conceived, written and executed by [Martin Fink](https://github.com/martin1fink),
