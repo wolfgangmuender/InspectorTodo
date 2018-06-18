@@ -1,7 +1,7 @@
 ### About
 
 InspectorTodo is a Python tool to track the status of todos in a software project, assuming that the project uses an 
-issue tracker, e.g. JIRA. In its simplest form it searches for all occurences of the string TODO and checks whether it 
+issue tracker, e.g. JIRA. In its simplest form it searches for all occurrences of the string TODO and checks whether it 
 is followed by an issue reference that is conform to a given regular expression.
 
 Download or clone this project and go to the resulting directory (Python >= 3.6 is required):
@@ -17,9 +17,15 @@ If you installed it in a virtualenv (which is recommended), then you always have
 ### Example
 
 The source code of InspectorTodo contains a small example project which can be parsed with the command (assuming you
-are at project root)
+are at project root of InspectorTodo)
 
     inspectortodo ./tests/inspectortodo/project_for_testing "IT-\d+" --version-pattern "Release-\d+" --version 2 --versions 1,2,3
+
+### Traversing the folder tree
+
+InspectorTodo currently features two ways of traversing the folder tree of your project: iterating over all files on 
+OS level or iterating over all files under git control. The latter is used when the folder passed to InspectorTodo as 
+root dir is a git root.
 
 ### Config file
 
