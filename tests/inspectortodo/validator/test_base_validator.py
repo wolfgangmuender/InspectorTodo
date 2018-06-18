@@ -3,7 +3,7 @@
 
 import pytest
 
-from inspectortodo.parser.Todo import Todo
+from inspectortodo.todo import Todo
 from inspectortodo.validator.base_validator import BaseValidator
 
 

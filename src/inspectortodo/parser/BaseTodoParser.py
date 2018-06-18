@@ -5,7 +5,7 @@ import functools
 import logging
 
 from .Context import Context
-from .Todo import Todo
+from inspectortodo.todo import Todo
 
 
 LINE_BREAK = '\n'

@@ -34,3 +34,11 @@ class Todo:
         log.error('[FILE]     %s' % self.file_path)
         log.error('[LINE]     %s' % self.line_number)
         log.error('[CONTENT]  %s' % self.content)
+
+    def print_xml(self, xml_file):
+        if self.is_valid:
+            xml_file.write('\t<testcase classname="{}" name="line {}" />\n'.format(self.file_path, self.line_number))
+        else:
+            xml_file.write('\t<testcase classname="{}" name="line {}" >\n'.format(self.file_path, self.line_number))
+            xml_file.write('\t\t<failure>{}</failure>\n'.format(self.error_reason))
+            xml_file.write('\t</testcase>\n')

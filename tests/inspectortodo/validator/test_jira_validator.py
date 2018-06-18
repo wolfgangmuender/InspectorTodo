@@ -3,7 +3,7 @@
 
 from unittest.mock import Mock
 
-from inspectortodo.parser.Todo import Todo
+from inspectortodo.todo import Todo
 from inspectortodo.validator import JiraValidator
 
 

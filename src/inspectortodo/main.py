@@ -22,8 +22,9 @@ log = logging.getLogger()
                                  'Versions are separated by comma and increase from left to right.')
 @click.option('--configfile', help='Config file to be used. If file does not exist, default config is created.'
                                    'If not set, all config values are treated as None.')
+@click.option('--xml', help="Output file for JUnit like xml which contains all found todos.")
 @click.option('--log-level', default='INFO', help="Set the log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
-def main(root_dir, issue_pattern, version_pattern, version, versions, configfile, log_level):
+def main(root_dir, issue_pattern, version_pattern, version, versions, configfile, xml, log_level):
     """
     ROOT_DIR is the directory to inspect recursively.
 
@@ -49,3 +50,21 @@ def main(root_dir, issue_pattern, version_pattern, version, versions, configfile
 
     if todos:
         validate_todos(todos, issue_pattern, version_pattern, version, versions)
+
+    if xml:
+        write_xml_file(xml, todos)
+
+
+def write_xml_file(filename, todos):
+    with open(filename, 'w', encoding='UTF-8') as xml_file:
+        print_xml(xml_file, todos)
+
+
+def print_xml(xml_file, todos):
+    num_failed = len([todo for todo in todos if not todo.is_valid])
+
+    xml_file.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+    xml_file.write('<testsuite name="InspectorTodo" tests="{}" failures="{}">\n'.format(len(todos), num_failed))
+    for todo in todos:
+        todo.print_xml(xml_file)
+    xml_file.write('</testsuite>\n')

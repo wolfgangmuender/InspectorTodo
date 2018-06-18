@@ -19,7 +19,7 @@ If you installed it in a virtualenv (which is recommended), then you always have
 The source code of InspectorTodo contains a small example project which can be parsed with the command (assuming you
 are at project root)
 
-    inspectortodo ./tests/inspectortodo/test_project "IT-\d+" --version-pattern "Release-\d+" --version 2 --versions 1,2,3
+    inspectortodo ./tests/inspectortodo/project_for_testing "IT-\d+" --version-pattern "Release-\d+" --version 2 --versions 1,2,3
 
 ### Config file
 
