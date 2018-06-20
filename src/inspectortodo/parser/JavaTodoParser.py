@@ -4,6 +4,9 @@
 from .BaseTodoParser import BaseTodoParser
 
 
+JAVA_ANNOTATIONS = ['@Ignore']
+
+
 class JavaTodoParser(BaseTodoParser):
     def __init__(self, keywords):
-        super().__init__('//', '/*', '*/', keywords, ['@Ignore'])
+        super().__init__('//', '/*', '*/', keywords, JAVA_ANNOTATIONS)

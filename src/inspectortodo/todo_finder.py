@@ -1,12 +1,12 @@
 # Copyright 2018 TNG Technology Consulting GmbH, Unterföhring, Germany
 # Licensed under the Apache License, Version 2.0 - see LICENSE.md in project root directory
 
-from git import InvalidGitRepositoryError, Repo
+from git import GitError, Repo
 import logging
 import os
 
 from .parser import (BashTodoParser, JavaTodoParser, PythonTodoParser, XmlTodoParser, PhpTodoParser, CsharpTodoParser,
-                     JavaScriptTodoParser)
+                     JavaScriptTodoParser, JAVA_ANNOTATIONS)
 
 
 log = logging.getLogger()
@@ -17,14 +17,15 @@ class TodoFinder(object):
     def __init__(self, root_dir, files_whitelist):
         self.root_dir = root_dir
         self.files_whitelist = files_whitelist
+        self.todo_keywords = ['TODO']
 
-        self.java_parser = JavaTodoParser(['TODO'])
-        self.bash_parser = BashTodoParser(['TODO'])
-        self.python_parser = PythonTodoParser(['TODO'])
-        self.xml_parser = XmlTodoParser(['TODO'])
-        self.php_parser = PhpTodoParser(['TODO'])
-        self.csharp_parser = CsharpTodoParser(['TODO'])
-        self.javascript_parser = JavaScriptTodoParser(['TODO'])
+        self.java_parser = JavaTodoParser(self.todo_keywords)
+        self.bash_parser = BashTodoParser(self.todo_keywords)
+        self.python_parser = PythonTodoParser(self.todo_keywords)
+        self.xml_parser = XmlTodoParser(self.todo_keywords)
+        self.php_parser = PhpTodoParser(self.todo_keywords)
+        self.csharp_parser = CsharpTodoParser(self.todo_keywords)
+        self.javascript_parser = JavaScriptTodoParser(self.todo_keywords)
 
         self.num_files = 0
 
@@ -32,25 +33,33 @@ class TodoFinder(object):
         log.info("Searching '%s' for todos.", self.root_dir)
         try:
             repository = Repo(self.root_dir)
-            todos = self._traverse_git(repository)
-        except InvalidGitRepositoryError:
+            todos = self._search_git(repository)
+        except GitError:
             todos = self._traverse_folder()
 
         log.info('Found %d todos in %d files.', len(todos), self.num_files)
 
         return todos
 
-    def _traverse_git(self, repository):
-        log.info("Traversing all files under git control in folder '%s'.", repository.working_dir)
-        return self._traverse_tree(repository.tree())
+    def _search_git(self, repository):
+        log.info("Grepping all files under git control in folder '%s'.", repository.working_dir)
+        keywords = self.todo_keywords + JAVA_ANNOTATIONS
 
-    def _traverse_tree(self, tree):
+        file_names = []
+        for keyword in keywords:
+            file_names = file_names + self._git_grep(repository, keyword)
+        file_names = list(set(file_names))
+
         todos = []
-        for sub_tree in tree.trees:
-            todos += self._traverse_tree(sub_tree)
-        for file in tree.blobs:
-            todos += self._parse(file.abspath, file.path)
+        for file_name in file_names:
+            todos += self._parse(os.path.join(os.path.abspath(self.root_dir), file_name), file_name)
+
         return todos
+
+    @staticmethod
+    def _git_grep(repository, keyword):
+        files_string = repository.git.grep('-l', keyword)
+        return [x.strip() for x in files_string.splitlines() if x] if files_string else []
 
     def _traverse_folder(self):
         log.info("Traversing all files under folder '%s'.", self.root_dir)
