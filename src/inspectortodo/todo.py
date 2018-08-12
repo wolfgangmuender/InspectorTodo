@@ -16,7 +16,7 @@ class Todo:
         self.error_reason = None
 
     def __str__(self):
-        return 'In file ' + self.file_path + ':' + str(self.line_number) + '\n' + self.content
+        return 'Todo in file ' + self.file_path + ':' + str(self.line_number) + ' | ' + self.content
 
     def mark_as_valid(self):
         self.is_valid = True

@@ -4,7 +4,7 @@
 from .BaseTodoParser import BaseTodoParser
 
 
-JAVA_ANNOTATIONS = ['@Ignore']
+JAVA_ANNOTATIONS = ['@Disabled', '@Ignore']
 
 
 class JavaTodoParser(BaseTodoParser):
