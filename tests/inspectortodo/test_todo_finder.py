@@ -11,14 +11,14 @@ def test_find_bare():
     root_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'project_for_testing')
     todo_finder = TodoFinder(root_dir, [])
     todos = todo_finder.find()
-    assert 4 == todo_finder.num_files
-    assert 8 == len(todos)
+    assert 5 == todo_finder.num_files
+    assert 9 == len(todos)
 
 
 def test_find_git():
     # searches in the _whole_ repository
-    root_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../..')
+    root_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
     todo_finder = TodoFinder(root_dir, [])
     todos = todo_finder.find()
-    assert 8 == todo_finder.num_files
-    assert 8 == len(todos)
+    assert 10 == todo_finder.num_files
+    assert 9 == len(todos)

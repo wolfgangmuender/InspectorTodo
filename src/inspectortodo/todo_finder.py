@@ -8,6 +8,7 @@ import os
 from .parser import (BashTodoParser, JavaTodoParser, PythonTodoParser, XmlTodoParser, PhpTodoParser, CsharpTodoParser,
                      JavaScriptTodoParser, JAVA_ANNOTATIONS)
 
+TODO_KEYWORDS = ['TODO']
 
 log = logging.getLogger()
 
@@ -17,7 +18,7 @@ class TodoFinder(object):
     def __init__(self, root_dir, files_whitelist):
         self.root_dir = root_dir
         self.files_whitelist = files_whitelist
-        self.todo_keywords = ['TODO']
+        self.todo_keywords = TODO_KEYWORDS
 
         self.java_parser = JavaTodoParser(self.todo_keywords)
         self.bash_parser = BashTodoParser(self.todo_keywords)

@@ -31,10 +31,10 @@ class BaseTodoParser(object):
                     if self.context == Context.code:
                         if self.matches_single_line_comment_start(ch, file_iterator):
                             self.context = Context.single_line_comment
-                            self.comment_content = self.single_line_comment_start
+                            self.comment_content = ch
                         elif self.matches_multi_line_comment_start(ch, file_iterator):
                             self.context = Context.multi_line_comment
-                            self.comment_content = self.multi_line_comment_start
+                            self.comment_content = ch
                         else:
                             annotation = self.find_matching_annotations(ch, file_iterator)
                             if annotation is not None:
