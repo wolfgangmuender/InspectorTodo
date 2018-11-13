@@ -22,7 +22,7 @@ class JiraValidatorForTesting(JiraValidator):
 
 def test_valid_status():
     issue_id = 'SP-4711'
-    pattern = 'SP-\d+'
+    pattern = r'SP-\d+'
     status = 'In Progress'
 
     todo = Todo('some path', 23, 'TODO ' + issue_id + ': content containing valid issue reference')

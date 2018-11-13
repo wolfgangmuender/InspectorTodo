@@ -11,8 +11,8 @@ def test_find_bare():
     root_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'project_for_testing')
     todo_finder = TodoFinder(root_dir, [])
     todos = todo_finder.find()
-    assert 5 == todo_finder.num_files
-    assert 9 == len(todos)
+    assert 6 == todo_finder.num_files
+    assert 11 == len(todos)
 
 
 def test_find_git():
@@ -20,5 +20,5 @@ def test_find_git():
     root_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
     todo_finder = TodoFinder(root_dir, [])
     todos = todo_finder.find()
-    assert 10 == todo_finder.num_files
-    assert 9 == len(todos)
+    assert 11 == todo_finder.num_files
+    assert 11 == len(todos)

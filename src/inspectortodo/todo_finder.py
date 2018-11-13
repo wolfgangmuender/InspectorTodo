@@ -105,6 +105,11 @@ class TodoFinder(object):
         elif file_extension == '.js':
             log.debug("Parsing JavaScript file %s", relative_path)
             return self.javascript_parser.get_todos(absolute_path, relative_path)
+        elif file_extension == '.vue':
+            log.debug("Parsing Vue.js single-file component file %s", relative_path)
+            js_todos = self.javascript_parser.get_todos(absolute_path, relative_path)
+            xml_todos = self.xml_parser.get_todos(absolute_path, relative_path)
+            return js_todos + xml_todos
         else:
             log.debug("Skipping unknown file type of file %s", relative_path)
             return []

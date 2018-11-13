@@ -25,7 +25,7 @@ log = logging.getLogger()
 @click.option('--xml', help="Output file for JUnit like xml which contains all found todos.")
 @click.option('--log-level', default='INFO', help="Set the log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
 def main(root_dir, issue_pattern, version_pattern, version, versions, configfile, xml, log_level):
-    """
+    r"""
     ROOT_DIR is the directory to inspect recursively.
 
     ISSUE_PATTERN is a regular expression for issue references in todos. The regular expression has to match the entire
