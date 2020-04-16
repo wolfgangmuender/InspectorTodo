@@ -1,7 +1,7 @@
 # Copyright 2018 TNG Technology Consulting GmbH, Unterföhring, Germany
 # Licensed under the Apache License, Version 2.0 - see LICENSE.md in project root directory
 
-from git import GitError, Repo
+from git import GitError, InvalidGitRepositoryError, Repo
 import logging
 import os
 
@@ -35,7 +35,7 @@ class TodoFinder(object):
         try:
             repository = Repo(self.root_dir)
             todos = self._search_git(repository)
-        except GitError:
+        except InvalidGitRepositoryError:
             todos = self._traverse_folder()
 
         log.info('Found %d todos in %d files.', len(todos), self.num_files)
@@ -59,7 +59,11 @@ class TodoFinder(object):
 
     @staticmethod
     def _git_grep(repository, keyword):
-        files_string = repository.git.grep('-l', keyword)
+        status, files_string, err = repository.git.grep('-l', keyword, with_extended_output=True, with_exceptions=False)
+        if status == 1:
+            log.debug("No result found.")
+        elif status > 1:
+            raise GitError("Command git grep returned status {} with error {}".format(status, err))
         return [x.strip() for x in files_string.splitlines() if x] if files_string else []
 
     def _traverse_folder(self):

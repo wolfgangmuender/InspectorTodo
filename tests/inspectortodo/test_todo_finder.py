@@ -3,6 +3,8 @@
 
 import os
 
+from git import Repo
+
 from inspectortodo.todo_finder import TodoFinder
 
 
@@ -22,3 +24,10 @@ def test_find_git():
     todos = todo_finder.find()
     assert 11 == todo_finder.num_files
     assert 11 == len(todos)
+
+
+def test_git_grep_does_not_raise_exception_when_nothing_is_found():
+    root_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
+    repository = Repo(root_dir)
+    file_names = TodoFinder._git_grep(repository, "this must not" + "be found")
+    assert 0 == len(file_names)
