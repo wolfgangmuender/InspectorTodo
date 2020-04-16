@@ -4,8 +4,8 @@
 import configparser
 import logging
 import sys
+from collections import defaultdict
 from typing import Optional
-
 
 DEFAULT_CONFIG = '''
 [jira_server]
@@ -30,11 +30,19 @@ whitelist=
 '''.strip()
 
 _config_inst: Optional[configparser.ConfigParser] = None
+# currently only supports nesting of 2
+_config_overwrites = defaultdict(dict)
 
 log = logging.getLogger(__name__)
 
 
 def get_config_value(*args):
+    # currently only supports nesting of 2
+    if len(args) == 2:
+        global _config_overwrites
+        if args[1] in _config_overwrites[args[0]]:
+            return _config_overwrites[args[0]][args[1]]
+
     global _config_inst
     if not _config_inst:
         return None
@@ -56,7 +64,13 @@ def get_multiline_config_value_as_list(*args):
     return [x.strip() for x in value.splitlines() if x] if value else value
 
 
-def load_or_create_config(config_path):
+# currently only supports nesting of 2
+def set_config_value(category, key, value):
+    global _config_overwrites
+    _config_overwrites[category][key] = value
+
+
+def load_or_create_configfile(config_path):
     global _config_inst
     _config_inst = configparser.ConfigParser()
 
@@ -65,11 +79,11 @@ def load_or_create_config(config_path):
         log.info('Loaded config from "%s"', config_path)
     else:
         log.info('No config file at "%s"', config_path)
-        create_default_config(config_path)
+        create_default_configfile(config_path)
         sys.exit(0)
 
 
-def create_default_config(config_path):
+def create_default_configfile(config_path):
     try:
         with open(config_path, 'x', encoding='UTF-8') as config_file:
             config_file.write(DEFAULT_CONFIG)

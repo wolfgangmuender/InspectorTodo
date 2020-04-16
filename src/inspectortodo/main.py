@@ -6,7 +6,7 @@ import os
 
 import click
 
-from .config import load_or_create_config, get_config_value, get_multiline_config_value_as_list
+from .config import load_or_create_configfile, get_config_value, get_multiline_config_value_as_list, set_config_value
 from .todo_finder import TodoFinder
 from .todo_validation import validate_todos
 
@@ -22,9 +22,12 @@ log = logging.getLogger()
                                  'Versions are separated by comma and increase from left to right.')
 @click.option('--configfile', help='Config file to be used. If file does not exist, default config is created.'
                                    'If not set, all config values are treated as None.')
+@click.option('--jira-user', help="Jira username")
+@click.option('--jira-password', help="Jira password")
 @click.option('--xml', help="Output file for JUnit like xml which contains all found todos.")
 @click.option('--log-level', default='INFO', help="Set the log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
-def main(root_dir, issue_pattern, version_pattern, version, versions, configfile, xml, log_level):
+def main(root_dir, issue_pattern, version_pattern, version, versions, configfile, jira_user, jira_password, xml,
+         log_level):
     r"""
     ROOT_DIR is the directory to inspect recursively.
 
@@ -39,7 +42,11 @@ def main(root_dir, issue_pattern, version_pattern, version, versions, configfile
     versions = versions.split(',') if versions else versions
 
     if configfile:
-        load_or_create_config(configfile)
+        load_or_create_configfile(configfile)
+    if jira_user:
+        set_config_value('jira_server', 'username', jira_user)
+    if jira_password:
+        set_config_value('jira_server', 'password', jira_password)
 
     paths_whitelist = []
     if get_config_value('files', 'whitelist'):
