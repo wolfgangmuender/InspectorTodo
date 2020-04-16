@@ -1,9 +1,10 @@
 # Copyright 2018 TNG Technology Consulting GmbH, Unterföhring, Germany
 # Licensed under the Apache License, Version 2.0 - see LICENSE.md in project root directory
 
-from git import GitError, InvalidGitRepositoryError, Repo
 import logging
 import os
+
+from git import GitError, InvalidGitRepositoryError, Repo
 
 from .parser import (BashTodoParser, JavaTodoParser, PythonTodoParser, XmlTodoParser, PhpTodoParser, CsharpTodoParser,
                      JavaScriptTodoParser, JAVA_ANNOTATIONS)
@@ -77,7 +78,7 @@ class TodoFinder(object):
         return todos
 
     def _parse(self, absolute_path, relative_path):
-        if relative_path in self.files_whitelist:
+        if any(relative_path.startswith(whitelisted) for whitelisted in self.files_whitelist):
             log.debug("Skipping whitelisted file %s", relative_path)
             return []
 
