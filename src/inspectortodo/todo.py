@@ -40,5 +40,5 @@ class Todo:
             xml_file.write('\t<testcase classname="{}" name="line {}" />\n'.format(self.file_path, self.line_number))
         else:
             xml_file.write('\t<testcase classname="{}" name="line {}" >\n'.format(self.file_path, self.line_number))
-            xml_file.write('\t\t<failure>{}</failure>\n'.format(self.error_reason))
+            xml_file.write('\t\t<failure message="{}">{}</failure>\n'.format(self.error_reason, self.content))
             xml_file.write('\t</testcase>\n')
