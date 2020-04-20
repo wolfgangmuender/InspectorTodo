@@ -5,7 +5,6 @@ import configparser
 import logging
 import sys
 from collections import defaultdict
-from typing import Optional
 
 DEFAULT_CONFIG = '''
 [jira_server]
@@ -29,7 +28,7 @@ whitelist=
     folder3
 '''.strip()
 
-_config_inst: Optional[configparser.ConfigParser] = None
+_config_inst = None
 # currently only supports nesting of 2
 _config_overwrites = defaultdict(dict)
 
