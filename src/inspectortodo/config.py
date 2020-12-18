@@ -50,9 +50,12 @@ def get_config_value(*args):
     if not _config_inst:
         return None
 
-    value = _config_inst
-    for arg in args:
-        value = value[arg]
+    try:
+        value = _config_inst
+        for arg in args:
+            value = value[arg]
+    except:
+        return None
 
     return value
 
