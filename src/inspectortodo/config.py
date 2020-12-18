@@ -59,7 +59,9 @@ def get_config_value(*args):
 
 def get_config_value_as_list(*args):
     value = get_config_value(*args)
-    return value.split(',') if value else value
+    return [] if value is None \
+        else value.split(',') if value \
+        else [value]
 
 
 def get_multiline_config_value_as_list(*args):
