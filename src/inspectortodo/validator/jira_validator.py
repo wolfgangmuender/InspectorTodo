@@ -36,7 +36,7 @@ class JiraValidator(BaseValidator):
             todo.mark_as_invalid('Issue {} does not exist.'.format(issue_id))
             return False
 
-        status = str(issue.raw['fields']['status'])
+        status = str(issue.raw['fields']['status']['name'])
         if status in self.allowed_statuses:
             todo.mark_as_valid()
             return True
