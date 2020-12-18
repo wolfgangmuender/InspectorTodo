@@ -16,6 +16,10 @@ password: test
 # mapping of issue types to allowed statuses
 all: Backlog,Todo,In Progress
 
+[report]
+# comma separated list of extra fields to report on invalid todos
+fields:
+
 [files]
 # whitelist of file or folder paths where todos are not searched or validated, relative to the root directory
 # a file is whitelisted if it begins with any of the paths of the whitelist, e.g.

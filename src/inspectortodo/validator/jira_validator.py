@@ -13,11 +13,12 @@ log = logging.getLogger()
 
 class JiraValidator(BaseValidator):
 
-    def __init__(self, issue_pattern, url, username, password, allowed_statuses):
+    def __init__(self, issue_pattern, url, username, password, allowed_statuses, report_fields):
         super().__init__()
         self.issue_pattern = issue_pattern
         self.issue_pattern_compiled = re.compile(issue_pattern)
         self.allowed_statuses = allowed_statuses
+        self.report_fields = report_fields
 
         self._init_jira_client(url, username, password)
 
@@ -35,15 +36,32 @@ class JiraValidator(BaseValidator):
             todo.mark_as_invalid('Issue {} does not exist.'.format(issue_id))
             return False
 
-        status = str(issue.fields.status)
+        status = str(issue.raw['fields']['status'])
         if status in self.allowed_statuses:
             todo.mark_as_valid()
             return True
         else:
             todo.mark_as_invalid('Issue status is \'' + status + '\', must be one of: '
-                                 + ", ".join(self.allowed_statuses))
+                                 + ", ".join(self.allowed_statuses)
+                                 + ' '
+                                 + ", ".join(self._report_fields(issue)))
             return False
 
     def _fetch_issue(self, issue_id):
         log.info("Fetching issue %s", issue_id)
-        return self._jira_client.issue(issue_id)
+        return self._jira_client.issue(issue_id, [['status'] + self.report_fields], ['names'])
+
+    def _report_fields(self, issue):
+        fields = issue.raw['fields']
+        names = issue.raw['names']
+        return [names[f] + ":" + self._display(fields[f]) for f in self.report_fields]
+
+    def _display(self, field):
+        if field is list:
+            return "; ".join([self._display(subfield) for subfield in field])
+        elif field is dict:
+            return field['name'] if 'name' in dict else ''
+        elif field is str:
+            return field
+        else:
+            return str(field)
