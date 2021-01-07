@@ -15,6 +15,7 @@ class Todo:
         self.content = content
         self.is_valid = True
         self.error_reason = None
+        self.category = None
 
     def __str__(self):
         return 'Todo in file ' + self.file_path + ':' + str(self.line_number) + ' | ' + self.content
@@ -26,6 +27,12 @@ class Todo:
     def mark_as_invalid(self, error_reason):
         self.is_valid = False
         self.error_reason = error_reason
+
+    def set_category(self, category):
+        self.category = category
+
+    def get_category(self):
+        return self.category
 
     def print(self, show_valid=False):
         if not show_valid and self.is_valid:

@@ -6,7 +6,7 @@ import os
 
 import click
 
-from .config import load_or_create_configfile, get_config_value, get_multiline_config_value_as_list, set_config_value
+from .config import load_or_create_configfile, get_config_value, get_config_value_as_list, get_multiline_config_value_as_list, set_config_value
 from .todo_finder import TodoFinder
 from .todo_validation import validate_todos
 
@@ -59,8 +59,23 @@ def main(root_dir, issue_pattern, version_pattern, version, versions, configfile
         validate_todos(todos, issue_pattern, version_pattern, version, versions)
 
     if xml:
-        write_xml_file(xml, todos)
+        todos_with_category = categorize_todos(todos)
+        for category in todos_with_category.keys():
+            xml_suffix = '' if category == 'default' else "." + category
+            write_xml_file(xml + xml_suffix, todos_with_category[category])
 
+def categorize_todos(todos):
+    result = {}
+    for t in todos:
+        category = get_effective_category(t)
+        if not category in result:
+            result[category] = []
+        result[category].append(t)
+    return result
+
+def get_effective_category(todo):
+    mapped_categories = get_config_value_as_list('category', 'mapped')
+    return 'default' if not todo.get_category() in mapped_categories else todo.get_category()
 
 def write_xml_file(filename, todos):
     with open(filename, 'w', encoding='UTF-8') as xml_file:

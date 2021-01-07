@@ -13,12 +13,13 @@ log = logging.getLogger()
 
 class JiraValidator(BaseValidator):
 
-    def __init__(self, issue_pattern, url, username, password, allowed_statuses, report_fields):
+    def __init__(self, issue_pattern, url, username, password, allowed_statuses, report_fields, category_fields):
         super().__init__()
         self.issue_pattern = issue_pattern
         self.issue_pattern_compiled = re.compile(issue_pattern)
         self.allowed_statuses = allowed_statuses
         self.report_fields = report_fields
+        self.category_fields  = category_fields
 
         self._init_jira_client(url, username, password)
 
@@ -41,6 +42,7 @@ class JiraValidator(BaseValidator):
             todo.mark_as_valid()
             return True
         else:
+            todo.set_category("_".join(self._category_fields(issue)))
             todo.mark_as_invalid('Issue status is \'' + status + '\', must be one of: '
                                  + ", ".join(self.allowed_statuses)
                                  + ' '
@@ -55,6 +57,10 @@ class JiraValidator(BaseValidator):
         fields = issue.raw['fields']
         names = issue.raw['names']
         return [names[f] + ":" + self._display(fields[f]) for f in self.report_fields]
+
+    def _category_fields(self, issue):
+        fields = issue.raw['fields']
+        return [self._display(fields[f]) for f in self.category_fields]
 
     def _display(self, field):
         if field is list:

@@ -9,8 +9,8 @@ from inspectortodo.validator import JiraValidator
 
 class JiraValidatorForTesting(JiraValidator):
 
-    def __init__(self, issue_pattern, allowed_statuses, report_fields):
-        super().__init__(issue_pattern, '', '', '', allowed_statuses, report_fields)
+    def __init__(self, issue_pattern, allowed_statuses, report_fields, category_fields):
+        super().__init__(issue_pattern, '', '', '', allowed_statuses, report_fields, category_fields)
         self.issues = {}
 
     def _init_jira_client(self, url, username, password):
@@ -28,7 +28,7 @@ def test_valid_status():
     todo = Todo('some path', 23, 'TODO ' + issue_id + ': content containing valid issue reference')
     issue = _initialize_issue_with_status(status)
 
-    validator = JiraValidatorForTesting(pattern, [status], [])
+    validator = JiraValidatorForTesting(pattern, [status], [], [])
     validator.issues[issue_id] = issue
     validator.validate(todo)
 
@@ -40,20 +40,22 @@ def test_invalid_status():
     pattern = r'SP-\d+'
     status = 'Closed'
     report_fields = ['customfield_11300']
+    category_fields = report_fields
 
     todo = Todo('some path', 23, 'TODO ' + issue_id + ': content containing invalid issue reference')
     issue = _initialize_issue_with_status(status)
 
-    validator = JiraValidatorForTesting(pattern, ['In Progress'], report_fields)
+    validator = JiraValidatorForTesting(pattern, ['In Progress'], report_fields, category_fields)
     validator.issues[issue_id] = issue
     validator.validate(todo)
 
     assert todo.is_valid is False
-    assert todo.error_reason.find("Team:['Cueball']") > 0
+    assert todo.category is 'Cueball'
+    assert todo.error_reason.find("Team:Cueball") > 0
 
 def _initialize_issue_with_status(status):
     issue = Mock()
-    result = {'reporter.displayName': 'John Doe', 'status': status, 'customfield_11300': ['Cueball']}
+    result = {'reporter.displayName': 'John Doe', 'status': {'name': status}, 'customfield_11300': ['Cueball']}
     names = {'customfield_11300': 'Team'}
     issue.raw = {'fields': result, 'names': names}
 

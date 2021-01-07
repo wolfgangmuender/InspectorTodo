@@ -18,7 +18,15 @@ all: Backlog,Todo,In Progress
 
 [report]
 # comma separated list of extra fields to report on invalid todos
-fields:
+fields: customfield_11300
+
+[category]
+# comma separated list of jira fields that shall be used to categorize todos
+# one xml file per mapped category will be created
+# unmapped values show up in global report
+# e.g. for teams to allow sending notifications to different recipients.
+fields: customfield_11300
+mapped: Alpha,Beta,Gamma
 
 [files]
 # whitelist of file or folder paths where todos are not searched or validated, relative to the root directory
