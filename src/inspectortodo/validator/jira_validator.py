@@ -63,11 +63,11 @@ class JiraValidator(BaseValidator):
         return [self._display(fields[f]) for f in self.category_fields]
 
     def _display(self, field):
-        if field is list:
-            return "; ".join([self._display(subfield) for subfield in field])
-        elif field is dict:
+        if type(field) is list:
+            return "_".join([self._display(subfield) for subfield in field])
+        elif type(field) is dict:
             return field['name'] if 'name' in dict else ''
-        elif field is str:
+        elif type(field) is str:
             return field
         else:
             return str(field)
