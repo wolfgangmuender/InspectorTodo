@@ -39,10 +39,16 @@ class JiraValidator(BaseValidator):
         if status in self.allowed_statuses:
             todo.mark_as_valid()
             return True
-        else:
-            todo.mark_as_invalid('Issue status is \'' + status + '\', must be one of: '
-                                 + ", ".join(self.allowed_statuses))
-            return False
+        elif issue.fields.parent:
+            parent = self._fetch_issue(str(issue.fields.parent))
+            parent_status = str(parent.fields.status)
+            if parent_status in self.allowed_statuses:
+                todo.mark_as_valid()
+                return True
+
+        todo.mark_as_invalid('Issue status is \'' + status + '\', must be one of: '
+                             + ", ".join(self.allowed_statuses))
+        return False
 
     def _fetch_issue(self, issue_id):
         log.info("Fetching issue %s", issue_id)
