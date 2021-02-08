@@ -39,7 +39,7 @@ class JiraValidator(BaseValidator):
         if status in self.allowed_statuses:
             todo.mark_as_valid()
             return True
-        elif issue.fields.parent:
+        elif hasattr(issue.fields, 'parent') and issue.fields.parent:
             parent = self._fetch_issue(str(issue.fields.parent))
             parent_status = str(parent.fields.status)
             if parent_status in self.allowed_statuses:
