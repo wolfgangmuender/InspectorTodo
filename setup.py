@@ -45,7 +45,7 @@ setup(
         'click>=6.7',
         'click-log>=0.2.1',
         'GitPython>=2.1.9',
-        'jira>=1.0.15 <3.0.0',
+        'jira>=1.0.15, <3.0.0',
     ],
     entry_points='''
         [console_scripts]
