@@ -3,7 +3,6 @@
 
 from setuptools import setup, find_packages
 
-
 LICENSE = """
    Copyright 2018 TNG Technology Consulting GmbH, Unterföhring, Germany
 
@@ -20,14 +19,14 @@ LICENSE = """
    limitations under the License.
 """
 
-
 with open('README.md') as readme_file:
     README = readme_file.read()
 
 setup(
     name='inspectortodo',
     version='0.1',
-    description=README,
+    description="InspectorTodo is a Python tool to track the status of todos in a software project, assuming that the project uses an issue tracker, e.g. JIRA.",
+    long_description=README,
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
     package_data={'': ['README.md', 'LICENSE.md']},
