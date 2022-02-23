@@ -27,7 +27,8 @@ class TodoFinder(object):
         self.xml_parser = XmlTodoParser(self.todo_keywords)
         self.php_parser = PhpTodoParser(self.todo_keywords)
         self.csharp_parser = CsharpTodoParser(self.todo_keywords)
-        self.javascript_parser = JavaScriptTodoParser(self.todo_keywords)
+        self.yamlTodoParser = YamlTodoParser(self.todo_keywords)
+        self.ftlTodoParser = FtlTodoParser(self.todo_keywords)
 
         self.num_files = 0
 
@@ -115,6 +116,12 @@ class TodoFinder(object):
             js_todos = self.javascript_parser.get_todos(absolute_path, relative_path)
             xml_todos = self.xml_parser.get_todos(absolute_path, relative_path)
             return js_todos + xml_todos
+        elif file_extension == '.yml' or file_extension == '.yaml':
+            log.debug("Parsing Yaml file %s", relative_path)
+            return self.yamlTodoParser.get_todos(absolute_path, relative_path)
+        elif file_extension == '.ftl':
+            log.debug("Parsing Ftl file %s", relative_path)
+            return self.ftlTodoParser.get_todos(absolute_path, relative_path)
         else:
             log.debug("Skipping unknown file type of file %s", relative_path)
             return []
