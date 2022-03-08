@@ -7,7 +7,7 @@ import os
 from git import GitError, InvalidGitRepositoryError, Repo
 
 from .parser import (BashTodoParser, JavaTodoParser, PythonTodoParser, XmlTodoParser, PhpTodoParser, CsharpTodoParser,
-                     JavaScriptTodoParser, JAVA_ANNOTATIONS)
+                     JavaScriptTodoParser, YamlTodoParser, FtlTodoParser, JAVA_ANNOTATIONS)
 
 TODO_KEYWORDS = ['TODO']
 
@@ -28,8 +28,8 @@ class TodoFinder(object):
         self.php_parser = PhpTodoParser(self.todo_keywords)
         self.csharp_parser = CsharpTodoParser(self.todo_keywords)
         self.javascript_parser = JavaScriptTodoParser(self.todo_keywords)
-        self.yamlTodoParser = YamlTodoParser(self.todo_keywords)
-        self.ftlTodoParser = FtlTodoParser(self.todo_keywords)
+        self.yaml_parser = YamlTodoParser(self.todo_keywords)
+        self.ftl_parser = FtlTodoParser(self.todo_keywords)
 
         self.num_files = 0
 

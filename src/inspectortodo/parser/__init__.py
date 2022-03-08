@@ -8,3 +8,5 @@ from .JavaTodoParser import JavaTodoParser, JAVA_ANNOTATIONS
 from .PhpTodoParser import PhpTodoParser
 from .PythonTodoParser import PythonTodoParser
 from .XmlTodoParser import XmlTodoParser
+from .YamlTodoParser import YamlTodoParser
+from .FtlTodoParser import FtlTodoParser
