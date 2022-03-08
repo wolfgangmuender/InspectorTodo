@@ -119,10 +119,10 @@ class TodoFinder(object):
             return js_todos + xml_todos
         elif file_extension == '.yml' or file_extension == '.yaml':
             log.debug("Parsing Yaml file %s", relative_path)
-            return self.yamlTodoParser.get_todos(absolute_path, relative_path)
+            return self.yaml_parser.get_todos(absolute_path, relative_path)
         elif file_extension == '.ftl':
             log.debug("Parsing Ftl file %s", relative_path)
-            return self.ftlTodoParser.get_todos(absolute_path, relative_path)
+            return self.ftl_parser.get_todos(absolute_path, relative_path)
         else:
             log.debug("Skipping unknown file type of file %s", relative_path)
             return []
