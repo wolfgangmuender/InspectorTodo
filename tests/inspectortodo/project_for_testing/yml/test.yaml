@@ -1,0 +1,6 @@
+Test:
+  stage: test
+  # TODO IT-0815: Make this file useful
+  content:
+    - test content
+    - Why?

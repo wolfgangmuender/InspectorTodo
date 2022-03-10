@@ -7,8 +7,9 @@ from git import Repo
 
 from inspectortodo.todo_finder import TodoFinder
 
-FIND_GIT_NUM_FILES = 12
-NUM_TODOS = 11
+FIND_GIT_NUM_FILES = 15
+FIND_BARE_NUM_FILES = 9
+NUM_TODOS = 14
 
 
 def test_find_bare():
@@ -16,7 +17,7 @@ def test_find_bare():
     root_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'project_for_testing')
     todo_finder = TodoFinder(root_dir, [])
     todos = todo_finder.find()
-    assert todo_finder.num_files == 6
+    assert todo_finder.num_files == FIND_BARE_NUM_FILES
     assert len(todos) == NUM_TODOS
 
 
