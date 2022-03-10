@@ -7,7 +7,7 @@ from git import Repo
 
 from inspectortodo.todo_finder import TodoFinder
 
-FIND_GIT_NUM_FILES = 14
+FIND_GIT_NUM_FILES = 15
 NUM_TODOS = 14
 
 

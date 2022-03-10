@@ -1,4 +1,3 @@
-<#import "/spring.ftl" as spring />
 <div id="about">
 
     <h2>About Test</h2>
