@@ -7,8 +7,8 @@ from git import Repo
 
 from inspectortodo.todo_finder import TodoFinder
 
-FIND_GIT_NUM_FILES = 12
-NUM_TODOS = 11
+FIND_GIT_NUM_FILES = 14
+NUM_TODOS = 14
 
 
 def test_find_bare():
