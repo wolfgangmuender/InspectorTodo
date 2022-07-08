@@ -37,7 +37,7 @@ def test_git_grep_does_not_raise_exception_when_nothing_is_found():
     assert len(file_names) == 0
 
 
-def test_whitelist_file():
+def test_ignore_list_file():
     root_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
     todo_finder = TodoFinder(root_dir, ['tests/inspectortodo/project_for_testing/java/Versions.java'])
     todos = todo_finder.find()
@@ -45,7 +45,7 @@ def test_whitelist_file():
     assert len(todos) == NUM_TODOS - 3
 
 
-def test_whitelist_folder():
+def test_ignore_list_folder():
     root_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
     todo_finder = TodoFinder(root_dir, ['tests/inspectortodo/project_for_testing/java/'])
     todos = todo_finder.find()
@@ -53,7 +53,7 @@ def test_whitelist_folder():
     assert len(todos) == NUM_TODOS - 6
 
 
-def test_whitelist_file_and_folder():
+def test_ignore_list_file_and_folder():
     root_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
     todo_finder = TodoFinder(root_dir, ['tests/inspectortodo/project_for_testing/java/Versions.java',
                                         'tests/inspectortodo/project_for_testing/java_script/'])

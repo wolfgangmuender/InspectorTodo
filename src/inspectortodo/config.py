@@ -16,12 +16,12 @@ password: test
 # mapping of issue types to allowed statuses
 all: Backlog,Todo,In Progress
 
-[files]
-# whitelist of file or folder paths where todos are not searched or validated, relative to the root directory
-# a file is whitelisted if it begins with any of the paths of the whitelist, e.g.
-# "project_for_testing/java" whitelists the folders "project_for_testing/java" and "project_for_testing/java_script"
+[paths]
+# list of file or folder paths where todos are not searched or validated, relative to the root directory
+# a file is ignored if it begins with any of the paths of the ignore list, e.g.
+# "project_for_testing/java" ignores the folders "project_for_testing/java" and "project_for_testing/java_script"
 # and all files and folders below
-whitelist=
+ignore_list=
     folder/file1.ext
     sub/sub/file2.ext
     folder2/

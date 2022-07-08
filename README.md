@@ -46,7 +46,7 @@ A list of allowed statuses in the issue tracker, like "Backlog" or "Todo".
 #### Files
 
 If there are files in the project that should not be parsed (e.g. because they belong to another project), you can 
-configure a whitelist of files here, relative to the project root. Compare the entries from the example config for
+configure a list of ignored paths here, relative to the project root. Compare the entries from the example config for
 details.
 
 ### Copyright & License

@@ -48,11 +48,14 @@ def main(root_dir, issue_pattern, version_pattern, version, versions, configfile
     if jira_password:
         set_config_value('jira_server', 'password', jira_password)
 
-    paths_whitelist = []
+    paths_ignore_list = []
+    if get_config_value('paths', 'ignore_list'):
+        paths_ignore_list = get_multiline_config_value_as_list('paths', 'ignore_list')
+    # stay backwards compatible for a while
     if get_config_value('files', 'whitelist'):
-        paths_whitelist = get_multiline_config_value_as_list('files', 'whitelist')
+        paths_ignore_list = get_multiline_config_value_as_list('files', 'whitelist')
 
-    todo_finder = TodoFinder(root_dir, paths_whitelist)
+    todo_finder = TodoFinder(root_dir, paths_ignore_list)
     todos = todo_finder.find()
 
     if todos:

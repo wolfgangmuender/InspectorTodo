@@ -16,9 +16,9 @@ log = logging.getLogger()
 
 class TodoFinder(object):
 
-    def __init__(self, root_dir, files_whitelist):
+    def __init__(self, root_dir, paths_ignore_list):
         self.root_dir = root_dir
-        self.files_whitelist = files_whitelist
+        self.paths_ignore_list = paths_ignore_list
         self.todo_keywords = TODO_KEYWORDS
 
         self.java_parser = JavaTodoParser(self.todo_keywords)
@@ -80,8 +80,8 @@ class TodoFinder(object):
         return todos
 
     def _parse(self, absolute_path, relative_path):
-        if any(relative_path.startswith(whitelisted) for whitelisted in self.files_whitelist):
-            log.debug("Skipping whitelisted file %s", relative_path)
+        if any(relative_path.startswith(ignored_path) for ignored_path in self.paths_ignore_list):
+            log.debug("Skipping file %s", relative_path)
             return []
 
         if self.num_files > 0 and self.num_files % 1000 == 0:
