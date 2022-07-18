@@ -19,15 +19,20 @@ log = logging.getLogger()
 @click.option('--version-pattern', help='Regular expression for version references in todos.')
 @click.option('--version', help='Current version.')
 @click.option('--versions', help='List of versions allowed in todos.'
-                                 'Versions are separated by comma and increase from left to right.')
+                                 ' Versions are separated by comma and increase from left to right.')
 @click.option('--configfile', help='Config file to be used. If file does not exist, default config is created.'
-                                   'If not set, all config values are treated as None.')
+                                   ' If not set, all config values are treated as None.')
 @click.option('--jira-user', help="Jira username")
 @click.option('--jira-password', help="Jira password")
+@click.option('--issue-filter-field', help="Issue field to filter for, when checking ToDos")
+@click.option('--issue-filter-values', help="Values that are checked against the field determined by"
+                                            " --`issue-filter-field`. If it matches any of the values here, the ToDo is"
+                                            " included in the final report")
 @click.option('--xml', help="Output file for JUnit like xml which contains all found todos.")
-@click.option('--log-level', default='INFO', help="Set the log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
-def main(root_dir, issue_pattern, version_pattern, version, versions, configfile, jira_user, jira_password, xml,
-         log_level):
+@click.option('--log-level', default='INFO', type=click.Choice(['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']),
+              help="Set the log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
+def main(root_dir, issue_pattern, version_pattern, version, versions, configfile, jira_user, jira_password,
+         issue_filter_field, issue_filter_values, xml, log_level):
     r"""
     ROOT_DIR is the directory to inspect recursively.
 
@@ -47,6 +52,9 @@ def main(root_dir, issue_pattern, version_pattern, version, versions, configfile
         set_config_value('jira_server', 'username', jira_user)
     if jira_password:
         set_config_value('jira_server', 'password', jira_password)
+    if issue_filter_field and issue_filter_values:
+        set_config_value('issue_filter', 'field', issue_filter_field)
+        set_config_value('issue_filter', 'values', issue_filter_values)
 
     paths_ignore_list = []
     if get_config_value('paths', 'ignore_list'):

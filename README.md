@@ -39,6 +39,12 @@ todo are in an allowed status.
 
 Connection settings for a JIRA server.
 
+### Issue filter
+
+A filter (currently tailored to Jira) that will only mark todos as invalid, if a field with name `filter_key` is present
+and has at least one of `filter_values` values as its entry. Can be used, _e.g._ to show only todos pointing to issues
+belonging to certain teams (_e.g._ on branches).
+
 #### Statuses
 
 A list of allowed statuses in the issue tracker, like "Backlog" or "Todo".

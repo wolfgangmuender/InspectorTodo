@@ -22,7 +22,9 @@ def validate_todos(todos, issue_pattern, version_pattern, version, versions):
                                        get_config_value('jira_server', 'url'),
                                        get_config_value('jira_server', 'username'),
                                        get_config_value('jira_server', 'password'),
-                                       get_config_value_as_list('statuses', 'all'))
+                                       get_config_value_as_list('statuses', 'all'),
+                                       get_config_value('issue_filter', 'field'),
+                                       get_config_value_as_list('issue_filter', 'values'))
         issue_validator.set_dependent_validator(jira_validator)
 
     if version_pattern is not None:
