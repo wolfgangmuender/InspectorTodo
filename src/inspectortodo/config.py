@@ -4,7 +4,6 @@
 import configparser
 import logging
 import sys
-from collections import defaultdict
 
 DEFAULT_CONFIG = '''
 [jira_server]
@@ -28,52 +27,42 @@ ignore_list=
     folder3
 '''.strip()
 
-_config_inst = None
-# currently only supports nesting of 2
-_config_overwrites = defaultdict(dict)
+_config_parser = configparser.ConfigParser()
 
 log = logging.getLogger(__name__)
 
 
-def get_config_value(*args):
-    # currently only supports nesting of 2
-    if len(args) == 2:
-        global _config_overwrites
-        if args[1] in _config_overwrites[args[0]]:
-            return _config_overwrites[args[0]][args[1]]
+def get_config_value(category, key):
 
-    global _config_inst
-    if not _config_inst:
-        return None
+    global _config_parser
 
-    value = _config_inst
-    for arg in args:
-        value = value[arg]
-
-    return value
+    if category in _config_parser.sections() and key in _config_parser[category]:
+        return _config_parser[category][key]
+    return None
 
 
-def get_config_value_as_list(*args):
-    value = get_config_value(*args)
+def get_config_value_as_list(category, key):
+    value = get_config_value(category, key)
     return value.split(',') if value else value
 
 
-def get_multiline_config_value_as_list(*args):
-    value = get_config_value(*args)
+def get_multiline_config_value_as_list(category, key):
+    value = get_config_value(category, key)
     return [x.strip() for x in value.splitlines() if x] if value else value
 
 
-# currently only supports nesting of 2
 def set_config_value(category, key, value):
-    global _config_overwrites
-    _config_overwrites[category][key] = value
+    global _config_parser
+
+    if category not in _config_parser.sections():
+        _config_parser.add_section(category)
+    _config_parser[category][key] = value
 
 
 def load_or_create_configfile(config_path):
-    global _config_inst
-    _config_inst = configparser.ConfigParser()
+    global _config_parser
 
-    found_config = bool(_config_inst.read(config_path))
+    found_config = bool(_config_parser.read(config_path))
     if found_config:
         log.info('Loaded config from "%s"', config_path)
     else:
