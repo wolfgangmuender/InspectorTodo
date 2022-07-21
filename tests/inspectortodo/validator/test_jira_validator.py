@@ -86,7 +86,35 @@ def test_invalid_status_invalid_parent_status():
     assert todo.is_valid is False
 
 
-def test_invalid_status_fitting_filter_then_todo_marked_invalid():
+def test_valid_status_fitting_filter_then_todo_valid_and_not_ignored():
+    issue_id = 'SP-4711'
+    issue = _initialize_issue_with_status(VALID_STATUS, None, filter_key=FILTER_FIELD, filter_value=FITTING_FILTER_VALUE)
+
+    todo = Todo('some path', 23, 'TODO ' + issue_id + ': content containing valid issue reference')
+
+    validator = JiraValidatorForTesting(PATTERN, [VALID_STATUS], issue_filter_field=FILTER_FIELD, issue_filter_values=[FITTING_FILTER_VALUE])
+    validator.issues[issue_id] = issue
+    validator.validate(todo)
+
+    assert todo.is_valid is True
+    assert todo.is_ignored is False
+
+
+def test_valid_status_unfitting_filter_then_todo_valid_and_ignored():
+    issue_id = 'SP-4711'
+    issue = _initialize_issue_with_status(VALID_STATUS, None, filter_key=FILTER_FIELD, filter_value=UNFITTING_FILTER_VALUE)
+
+    todo = Todo('some path', 23, 'TODO ' + issue_id + ': content containing valid issue reference')
+
+    validator = JiraValidatorForTesting(PATTERN, [VALID_STATUS], issue_filter_field=FILTER_FIELD, issue_filter_values=[FITTING_FILTER_VALUE])
+    validator.issues[issue_id] = issue
+    validator.validate(todo)
+
+    assert todo.is_valid is True
+    assert todo.is_ignored is True
+
+
+def test_invalid_status_fitting_filter_then_todo_invalid_and_not_ignored():
     issue_id = 'SP-4711'
     issue = _initialize_issue_with_status(INVALID_STATUS, None, filter_key=FILTER_FIELD, filter_value=FITTING_FILTER_VALUE)
 
@@ -97,9 +125,10 @@ def test_invalid_status_fitting_filter_then_todo_marked_invalid():
     validator.validate(todo)
 
     assert todo.is_valid is False
+    assert todo.is_ignored is False
 
 
-def test_invalid_status_unfitting_filter_then_todo_marked_valid():
+def test_invalid_status_unfitting_filter_then_todo_invalid_and_ignored():
     issue_id = 'SP-4711'
     issue = _initialize_issue_with_status(INVALID_STATUS, None, filter_key=FILTER_FIELD, filter_value=UNFITTING_FILTER_VALUE)
 
@@ -109,10 +138,11 @@ def test_invalid_status_unfitting_filter_then_todo_marked_valid():
     validator.issues[issue_id] = issue
     validator.validate(todo)
 
-    assert todo.is_valid is True
+    assert todo.is_valid is False
+    assert todo.is_ignored is True
 
 
-def test_invalid_status_filter_key_not_present_in_issue_then_todo_marked_valid():
+def test_filter_key_not_present_in_issue_then_todo_not_ignored():
     issue_id = 'SP-4711'
     issue = _initialize_issue_with_status(INVALID_STATUS, None, filter_key=None, filter_value=None)
 
@@ -122,10 +152,10 @@ def test_invalid_status_filter_key_not_present_in_issue_then_todo_marked_valid()
     validator.issues[issue_id] = issue
     validator.validate(todo)
 
-    assert todo.is_valid is True
+    assert todo.is_ignored is False
 
 
-def test_invalid_status_filter_key_present_in_issue_but_value_none_then_todo_marked_valid():
+def test_filter_key_present_in_issue_but_value_none_then_todo_not_ignored():
     issue_id = 'SP-4711'
     issue = _initialize_issue_with_status(INVALID_STATUS, None, filter_key=FILTER_FIELD, filter_value=None)
 
@@ -135,10 +165,10 @@ def test_invalid_status_filter_key_present_in_issue_but_value_none_then_todo_mar
     validator.issues[issue_id] = issue
     validator.validate(todo)
 
-    assert todo.is_valid is True
+    assert todo.is_ignored is False
 
 
-def test_invalid_status_fitting_filter_in_list_then_todo_marked_invalid():
+def test_fitting_filter_in_list_then_todo_not_ignored():
     issue_id = 'SP-4711'
     issue = _initialize_issue_with_status(INVALID_STATUS, None, filter_key=FILTER_FIELD, filter_value=[FITTING_FILTER_VALUE, UNFITTING_FILTER_VALUE])
 
@@ -148,7 +178,7 @@ def test_invalid_status_fitting_filter_in_list_then_todo_marked_invalid():
     validator.issues[issue_id] = issue
     validator.validate(todo)
 
-    assert todo.is_valid is False
+    assert todo.is_ignored is False
 
 
 def _initialize_issue_with_status(status, parent_id, filter_key=None, filter_value=None):
