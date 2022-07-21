@@ -35,17 +35,19 @@ def validate_todos(todos, issue_pattern, version_pattern, version, versions):
             version_validator.set_dependent_validator(VersionsValidator(versions, version))
 
     invalid_todos = []
+    amount_ignored = 0
     for todo in todos:
         validate_todo(validators, todo)
         if not todo.is_valid:
             invalid_todos.append(todo)
+            amount_ignored += todo.is_ignored
 
     if not invalid_todos:
         log.info('All todos are fine.')
         return
 
     log.error('------------------------------------------------------------------------------')
-    log.error('Found %d invalid todos.', len(invalid_todos))
+    log.error('Found %d invalid todo(s) (%d of them ignored).', len(invalid_todos), amount_ignored)
     log.error('------------------------------------------------------------------------------')
     for invalid_todo in invalid_todos:
         invalid_todo.print()
