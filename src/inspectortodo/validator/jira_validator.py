@@ -64,16 +64,18 @@ class JiraValidator(BaseValidator):
 
     def _get_reason_if_ignored(self, issue):
         if self.issue_filter_field not in issue.raw['fields']:
+            # Filter key not present -> maybe wrongly configured -> warn and don't ignore!
             log.warning(f"issue_filter_field={self.issue_filter_field} not found in fields!")
-            return None  # Filter key not present -> maybe wrongly configured -> warn and don't ignore!
+            return None
         if issue.raw['fields'][self.issue_filter_field] is None:
-            log.debug(f"No value set for issue_filter_field={self.issue_filter_field}!")
-            return None  # Filter value not set -> don't ignore!
+            # Filter key not present -> maybe wrongly configured -> warn and don't ignore!
+            log.warning(f"No value set for issue_filter_field={self.issue_filter_field}!")
+            return None
         value_to_test_raw = issue.raw['fields'][self.issue_filter_field]
         set_of_str_values_to_test = get_as_set_of_str(value_to_test_raw)
         filter_matches = set(self.issue_filter_values).intersection(set_of_str_values_to_test)
         if filter_matches:
-            log.debug(f"Filter matches: {filter_matches=}!")
+            log.debug(f"Filter matches: {filter_matches}!")
             return None  # Filter matches, don't ignore!
         ignored_reason = f"Ignored: {self.issue_filter_field}={set_of_str_values_to_test} does not fit filter {set(self.issue_filter_values)}"
         log.debug(ignored_reason)
