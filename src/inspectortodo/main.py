@@ -19,9 +19,9 @@ log = logging.getLogger()
 @click.option('--version-pattern', help='Regular expression for version references in todos.')
 @click.option('--version', help='Current version.')
 @click.option('--versions', help='List of versions allowed in todos.'
-                                 ' Versions are separated by comma and increase from left to right.')
+                                 'Versions are separated by comma and increase from left to right.')
 @click.option('--configfile', help='Config file to be used. If file does not exist, default config is created.'
-                                   ' If not set, all config values are treated as None.')
+                                   'If not set, all config values are treated as None.')
 @click.option('--jira-user', help="Jira username")
 @click.option('--jira-password', help="Jira password")
 @click.option('--issue-filter-field', help="Issue field to filter for, when checking ToDos")
