@@ -44,12 +44,14 @@ class Todo:
         log.error('[LINE]     %s' % self.line_number)
         log.error('[CONTENT]  %s' % self.content)
 
-
     def print_xml(self, xml_file):
-        status_ignored = ' status="ignored"' if self.is_ignored else ''
-        if self.is_valid:
-            xml_file.write('\t<testcase classname="{}" name="line {}"{} />\n'.format(self.file_path, self.line_number, status_ignored))
+        if self.is_ignored:
+            xml_file.write('\t<testcase classname="{}" name="line {}" status="ignored" >\n'.format(self.file_path, self.line_number))
+            xml_file.write('\t\t<skipped message="{}">{}</skipped>\n'.format(self.ignored_reason, escape(self.content)))
+            xml_file.write('\t</testcase>\n')
+        elif self.is_valid:
+            xml_file.write('\t<testcase classname="{}" name="line {}" />\n'.format(self.file_path, self.line_number))
         else:
-            xml_file.write('\t<testcase classname="{}" name="line {}"{} >\n'.format(self.file_path, self.line_number, status_ignored))
+            xml_file.write('\t<testcase classname="{}" name="line {}" >\n'.format(self.file_path, self.line_number))
             xml_file.write('\t\t<failure message="{}">{}</failure>\n'.format(self.error_reason, escape(self.content)))
             xml_file.write('\t</testcase>\n')
