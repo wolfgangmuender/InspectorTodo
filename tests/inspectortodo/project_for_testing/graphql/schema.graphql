@@ -1,0 +1,4 @@
+type Test {
+    """ TODO IT-3333 find something more to test """
+    code: String
+}

@@ -10,3 +10,4 @@ from .PythonTodoParser import PythonTodoParser
 from .XmlTodoParser import XmlTodoParser
 from .YamlTodoParser import YamlTodoParser
 from .FtlTodoParser import FtlTodoParser
+from .GraphqlTodoParser import GraphqlTodoParser
