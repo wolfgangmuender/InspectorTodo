@@ -24,6 +24,7 @@ log = logging.getLogger()
                                    'If not set, all config values are treated as None.')
 @click.option('--jira-user', help="Jira username")
 @click.option('--jira-password', help="Jira password")
+@click.option('--jira-token', help="Jira API Token")
 @click.option('--issue-filter-field', help="Issue field to filter for, when checking ToDos")
 @click.option('--issue-filter-values', help="Values that are checked against the field determined by"
                                             " --`issue-filter-field`. If it matches any of the values here, the ToDo is"
@@ -31,7 +32,7 @@ log = logging.getLogger()
 @click.option('--xml', help="Output file for JUnit like xml which contains all found todos.")
 @click.option('--log-level', default='INFO', type=click.Choice(['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']),
               help="Set the log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
-def main(root_dir, issue_pattern, version_pattern, version, versions, configfile, jira_user, jira_password,
+def main(root_dir, issue_pattern, version_pattern, version, versions, configfile, jira_user, jira_password, jira_token,
          issue_filter_field, issue_filter_values, xml, log_level):
     r"""
     ROOT_DIR is the directory to inspect recursively.
@@ -52,6 +53,8 @@ def main(root_dir, issue_pattern, version_pattern, version, versions, configfile
         set_config_value('jira_server', 'username', jira_user)
     if jira_password:
         set_config_value('jira_server', 'password', jira_password)
+    if jira_token:
+        set_config_value('jira_server', 'token', jira_token)
     if issue_filter_field and issue_filter_values:
         set_config_value('issue_filter', 'field', issue_filter_field)
         set_config_value('issue_filter', 'values', issue_filter_values)
