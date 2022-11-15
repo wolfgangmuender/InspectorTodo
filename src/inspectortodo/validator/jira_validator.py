@@ -26,8 +26,8 @@ class JiraValidator(BaseValidator):
     def _init_jira_client(self, url, username, password, token):
         if token:
           headers = JIRA.DEFAULT_OPTIONS["headers"].copy()
-          headers["Authorization"] = "Bearer " + password
-          self._jira_client = JIRA(url,options={"headers": headers})
+          headers["Authorization"] = "Bearer " + token
+          self._jira_client = JIRA(url, options={"headers": headers})
         else:
           self._jira_client = JIRA(url, auth=(username, password))
 
