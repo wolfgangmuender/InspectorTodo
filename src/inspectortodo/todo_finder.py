@@ -7,7 +7,7 @@ import os
 from git import GitError, InvalidGitRepositoryError, Repo
 
 from .parser import (BashTodoParser, JavaTodoParser, PythonTodoParser, XmlTodoParser, PhpTodoParser, CsharpTodoParser,
-                     JavaScriptTodoParser, YamlTodoParser, FtlTodoParser, JAVA_ANNOTATIONS)
+                     JavaScriptTodoParser, YamlTodoParser, FtlTodoParser, GraphqlTodoParser, JAVA_ANNOTATIONS)
 
 TODO_KEYWORDS = ['TODO']
 
@@ -30,6 +30,7 @@ class TodoFinder(object):
         self.javascript_parser = JavaScriptTodoParser(self.todo_keywords)
         self.yaml_parser = YamlTodoParser(self.todo_keywords)
         self.ftl_parser = FtlTodoParser(self.todo_keywords)
+        self.graphql_parser = GraphqlTodoParser(self.todo_keywords)
 
         self.num_files = 0
 
@@ -123,6 +124,14 @@ class TodoFinder(object):
         elif file_extension == '.ftl':
             log.debug("Parsing Ftl file %s", relative_path)
             return self.ftl_parser.get_todos(absolute_path, relative_path)
+        elif file_extension == '.ts':
+            log.debug("Parsing TypeScript file %s", relative_path)
+            js_todos = self.javascript_parser.get_todos(absolute_path, relative_path)
+            graphql_todos = self.graphql_parser.get_todos(absolute_path, relative_path)
+            return js_todos + graphql_todos
+        elif file_extension == '.graphql':
+            log.debug("Parsing Graphql file %s", relative_path)
+            return self.graphql_parser.get_todos(absolute_path, relative_path)
         else:
             log.debug("Skipping unknown file type of file %s", relative_path)
             return []
