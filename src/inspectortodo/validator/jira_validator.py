@@ -13,7 +13,7 @@ log = logging.getLogger()
 
 class JiraValidator(BaseValidator):
 
-    def __init__(self, issue_pattern, url, username, password, allowed_statuses, issue_filter_field, issue_filter_values):
+    def __init__(self, issue_pattern, url, username, password, token, allowed_statuses, issue_filter_field, issue_filter_values):
         super().__init__()
         self.issue_pattern = issue_pattern
         self.issue_pattern_compiled = re.compile(issue_pattern)
@@ -21,10 +21,15 @@ class JiraValidator(BaseValidator):
         self.issue_filter_field = issue_filter_field
         self.issue_filter_values = issue_filter_values
 
-        self._init_jira_client(url, username, password)
+        self._init_jira_client(url, username, password, token)
 
-    def _init_jira_client(self, url, username, password):
-        self._jira_client = JIRA(url, auth=(username, password))
+    def _init_jira_client(self, url, username, password, token):
+        if token:
+          headers = JIRA.DEFAULT_OPTIONS["headers"].copy()
+          headers["Authorization"] = "Bearer " + token
+          self._jira_client = JIRA(url, options={"headers": headers})
+        else:
+          self._jira_client = JIRA(url, auth=(username, password))
 
     def _validate(self, todo):
         match = self.issue_pattern_compiled.search(todo.content)
