@@ -13,7 +13,7 @@ class JiraValidatorForTesting(JiraValidator):
         super().__init__(issue_pattern, '', '', '', '', allowed_statuses, issue_filter_field, issue_filter_values)
         self.issues = {}
 
-    def _init_jira_client(self, url, username, password):
+    def _init_jira_client(self, url, username, password, token):
         pass
 
     def _fetch_issue(self, issue_id):
