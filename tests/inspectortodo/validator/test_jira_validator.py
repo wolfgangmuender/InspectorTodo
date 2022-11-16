@@ -10,7 +10,7 @@ from inspectortodo.validator import JiraValidator
 class JiraValidatorForTesting(JiraValidator):
 
     def __init__(self, issue_pattern, allowed_statuses, issue_filter_field=None, issue_filter_values=None):
-        super().__init__(issue_pattern, '', '', '', allowed_statuses, issue_filter_field, issue_filter_values)
+        super().__init__(issue_pattern, '', '', '', '', allowed_statuses, issue_filter_field, issue_filter_values)
         self.issues = {}
 
     def _init_jira_client(self, url, username, password):
