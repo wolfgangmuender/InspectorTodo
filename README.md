@@ -60,6 +60,4 @@ details.
 InspectorTodo was conceived, written and executed by [Martin Fink](https://github.com/martin1fink),
 [Kai Helbig](https://github.com/ostrya) and [Wolfgang M&uuml;nder](https://github.com/wolfgangmuender).
 
-&copy; 2018 TNG Technology Consulting GmbH, Unterf&ouml;hring, Germany
-
 Licensed under the Apache License, Version 2.0 - see [LICENSE.md](LICENSE.md) in project root directory.
