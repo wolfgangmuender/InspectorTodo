@@ -8,9 +8,11 @@ Install and update using pip:
 
     pip install inspectortodo
 
-Then you can run InspectorTodo:
+Then you can run InspectorTodo from the command line,
 
     inspectortodo --help
+
+or invoke its API from your Python code (see example below).
 
 If you installed it in a virtualenv (which is recommended), then you always have to activate the virtualenv first.
 
@@ -20,6 +22,16 @@ The source code of InspectorTodo contains a small example project which can be p
 are at project root of InspectorTodo)
 
     inspectortodo ./tests/inspectortodo/project_for_testing "IT-\d+" --version-pattern "Release-\d+" --version 2 --versions 1,2,3
+
+Equivalent example in Python:
+
+```python
+import inspectortodo
+
+# The inspect() function takes the same arguments as the CLI
+inspectortodo.inspect(root_dir="./tests/inspectortodo/project_for_testing", issue_pattern="IT-\d+", version_pattern="Release-\d+", version="2", versions="1,2,3")
+```
+
 
 ### Traversing the folder tree
 

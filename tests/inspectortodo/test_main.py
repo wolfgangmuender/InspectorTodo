@@ -1,7 +1,8 @@
 import io
+import os
 from xml.etree import ElementTree
 
-from inspectortodo.main import print_xml
+from inspectortodo.main import print_xml, inspect
 from inspectortodo.todo import Todo
 
 XML_CONTENT = '<?xml version="1.0" encoding="UTF-8"?>\n' \
@@ -36,3 +37,9 @@ def test_print_xml():
 
     root = ElementTree.fromstring(xml_content)
     assert root is not None
+
+
+def test_inspect():
+    # This is an integration test, where we only care about the inspect()
+    # function not throwing.
+    inspect(os.path.dirname(__file__) + "/project_for_testing", r"IT-\d+")

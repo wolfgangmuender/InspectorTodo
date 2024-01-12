@@ -31,6 +31,12 @@ log = logging.getLogger()
               help="Set the log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
 def main(root_dir, issue_pattern, version_pattern, version, versions, configfile, jira_user, jira_password, jira_token,
          issue_filter_field, issue_filter_values, xml, log_level):
+    inspect(root_dir, issue_pattern, version_pattern, version, versions, configfile, jira_user, jira_password, jira_token,
+         issue_filter_field, issue_filter_values, xml, log_level)
+
+
+def inspect(root_dir, issue_pattern, version_pattern=None, version=None, versions=None, configfile=None, jira_user=None, jira_password=None, jira_token=None,
+         issue_filter_field=None, issue_filter_values=None, xml=None, log_level="INFO"):
     r"""
     ROOT_DIR is the directory to inspect recursively.
 
