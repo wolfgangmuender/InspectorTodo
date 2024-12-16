@@ -50,3 +50,35 @@ I hereby agree to the terms of the InspectorTodo Contributor License Agreement. 
 Please adjust your code formatter to the general style of the project,
 based on [PEP8](https://www.python.org/dev/peps/pep-0008/).
 Your IDE will probably provide support for it.
+
+## How to release
+
+Install [Build](https://pypa-build.readthedocs.io/) and [Twine](https://twine.readthedocs.io/)
+
+```commandline
+pip install build twine
+```
+
+Build
+
+```commandline
+python -m build
+```
+
+Validate
+
+```commandline
+twine check dist/*
+```
+
+Upload to Test PyPi
+
+```commandline
+twine upload -r testpypi dist/*
+```
+
+Upload to PyPi
+
+```commandline
+twine upload dist/*
+```
